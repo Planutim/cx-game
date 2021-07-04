@@ -94,20 +94,26 @@ func clearDrawComponentList() {
 	}
 }
 
+//todo
 func DrawEntities() {
 	for i := range DrawComponentList {
-		for _, v := range DrawComponentList[i] {
-			physicsComponent := GetPhysicsComponent(v.objectId)
-			if physicsComponent == nil {
-				continue
+		switch i {
+		case SPRITE:
+			for _, v := range DrawComponentList[i] {
+				physicsComponent := GetPhysicsComponent(v.objectId)
+				if physicsComponent == nil {
+					continue
+				}
+				spriteloader.DrawSpriteQuad(
+					physicsComponent.Pos.X,
+					physicsComponent.Pos.Y,
+					physicsComponent.Size.X,
+					physicsComponent.Size.Y,
+					v.spriteId,
+				)
 			}
-			spriteloader.DrawSpriteQuad(
-				physicsComponent.Position.X,
-				physicsComponent.Position.Y,
-				physicsComponent.Size.X,
-				physicsComponent.Size.Y,
-				v.spriteId,
-			)
+		default:
+			continue
 		}
 	}
 }
