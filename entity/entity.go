@@ -34,22 +34,43 @@ package entity
 // - the physics update id (an integer) describing the type of physics or state update to do on the object
 
 type Entity struct {
-	EntityType            int
-	MovementComponent     int
-	MovementParameter     int
-	PhysicsUpdateFunction int
-	PhysicsParameter      int
-	DrawUpdateFunction    int
+	// EntityType            int
+	EntityType      int
+	EntityId        int
+	DrawComponentId int
+	// PhysicsUpdateId int
+	// MovementComponent     int
+	// MovementParameter     int
+	// PhysicsUpdateFunction int
+	// PhysicsParameter      int
+	DrawUpdateFunction int
 	// Metadata Metadata
 	// Attributes Attribute
-	
 }
 
-//we should create array of entities for each agent, particle, furniture etc
+type EntityType int
 
+//we should create array of entities for each agent, particle, furniture etc
 
 type Metadata struct {
 }
 
 type Attribute struct {
 }
+
+// and we have for each object
+
+// - object type id (the type, particle, agent, furniture, etc)
+// - object id (the id or index for that object in the list for that object type)
+// - the draw component id (that will be passed the object type id and the object id);
+// the parameters will be fetchable from the object id and object type id, and most draw components will only work for a specific object type
+// - the physics update id (an integer) describing the type of physics or state update to do on the object
+
+// particles[]
+// agents[]
+// furniture[]
+
+//particle
+//agent
+//furniture
+//draw component id

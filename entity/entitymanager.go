@@ -1,4 +1,6 @@
 package entity
 
 
-func DeleteEntity
+var (
+	
+)
