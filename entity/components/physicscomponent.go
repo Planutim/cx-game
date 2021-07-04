@@ -1,7 +1,6 @@
 package components
 
 import (
-	"github.com/skycoin/cx-game/cxmath"
 	"github.com/skycoin/cx-game/physics"
 )
 
@@ -12,8 +11,7 @@ var (
 )
 
 type PhysicsComponent struct {
-	Position cxmath.Vec2
-	Size     cxmath.Vec2
+	physics.Body
 }
 
 func GetPhysicsComponent(objectId int) *PhysicsComponent {
@@ -22,6 +20,8 @@ func GetPhysicsComponent(objectId int) *PhysicsComponent {
 	}
 	return PhysicsComponentList[objectId]
 }
+
+//add method is not needed, the agent creation method will handle it
 
 func RemovePhysicsComponent(objectId int) {
 	if objectId <= 0 || objectId >= len(PhysicsComponentList) {
@@ -39,5 +39,7 @@ func UpdatePhysics(dt float32) {
 }
 
 func fixedTick() {
-
+	for i := range PhysicsComponentList {
+		PhysicsComponentList[i].Move(nil, physics.TimeStep)
+	}
 }
