@@ -1,17 +1,13 @@
 package agents
 
-import (
-	"github.com/skycoin/cx-game/physics"
-)
-
 type Agent struct {
-	// InventoryId uint32
-	AgentMeta
-	physics.Body
-	AgentType AgentType
-	AgentID   int32
-	// CollisionWidth  float32
-	// CollisionHeight float32
+	MovementComponent     int
+	MovementParameter     int
+	PhysicsUpdateFunction int
+	PhysicsParameter      int
+	InventoryId           uint32
+	AgentID               int32
+	EntityType            int32
 }
 
 type AgentType int
@@ -33,8 +29,6 @@ func newAgent(agentType AgentType) *Agent {
 func (a *Agent) FixedTick() {
 	//move the agent
 	//resolve collisions
-	a.Pos = a.Pos.Add(a.Vel.Mult(physics.TimeStep))
-
 }
 
 func (a *Agent) Draw() {
