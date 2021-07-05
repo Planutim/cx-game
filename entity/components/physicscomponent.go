@@ -14,20 +14,27 @@ type PhysicsComponent struct {
 	physics.Body
 }
 
-func GetPhysicsComponent(objectId int) *PhysicsComponent {
-	if objectId <= 0 || objectId >= len(PhysicsComponentList) {
+func GetPhysicsComponent(agentId int) *PhysicsComponent {
+	if agentId <= 0 || agentId >= len(PhysicsComponentList) {
 		return nil
 	}
-	return PhysicsComponentList[objectId]
+	return PhysicsComponentList[agentId]
 }
 
 //add method is not needed, the agent creation method will handle it
+func AddPhysicsComponent(agentId int) {
+	if agentId == len(PhysicsComponentList) {
+		PhysicsComponentList = append(PhysicsComponentList, &PhysicsComponent{})
+	} else {
+		PhysicsComponentList[agentId] = &PhysicsComponent{}
+	}
+}
 
-func RemovePhysicsComponent(objectId int) {
-	if objectId <= 0 || objectId >= len(PhysicsComponentList) {
+func RemovePhysicsComponent(agentId int) {
+	if agentId <= 0 || agentId >= len(PhysicsComponentList) {
 		return
 	}
-	PhysicsComponentList[objectId] = nil
+	PhysicsComponentList[agentId] = nil
 }
 
 func UpdatePhysics(dt float32) {
@@ -40,6 +47,8 @@ func UpdatePhysics(dt float32) {
 
 func fixedTick() {
 	for i := range PhysicsComponentList {
-		PhysicsComponentList[i].Move(nil, physics.TimeStep)
+		if PhysicsComponentList[i] != nil {
+			PhysicsComponentList[i].Move(nil, physics.TimeStep)
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package agents
 
 import (
+	"github.com/skycoin/cx-game/cxmath"
 	"github.com/skycoin/cx-game/physics"
 )
 
@@ -10,6 +11,7 @@ type AgentList struct {
 
 var (
 	accumulator float32
+	idQueue     cxmath.QueueI
 )
 
 func NewAgentList() *AgentList {
@@ -30,8 +32,19 @@ func (al *AgentList) CreateAgent(agentType AgentType) bool {
 	if len(al.Agents) > MAX_AGENTS {
 		return false
 	}
-	agent := newAgent(agentType)
-	al.Agents = append(al.Agents, agent)
+
+	agent := newAgent()
+
+	//get new id
+	newId, err := idQueue.Pop()
+	if err != nil {
+		newId = len(al.Agents)
+		al.Agents = append(al.Agents, agent)
+	} else {
+		al.Agents[newId] = agent
+	}
+	agent.AgentId = newId
+
 	return true
 }
 
@@ -39,12 +52,12 @@ func (al *AgentList) DestroyAgent(agentId int32) bool {
 	if agentId < 0 || agentId >= int32(len(al.Agents)) {
 		return false
 	}
-	for i, v := range al.Agents {
-		if v.AgentID == agentId {
-			al.Agents = append(al.Agents[:i], al.Agents[i+1:]...)
-			return true
-		}
-	}
+	// for i, v := range al.Agents {
+	// 	if v.AgentID == agentId {
+	// 		al.Agents = append(al.Agents[:i], al.Agents[i+1:]...)
+	// 		return true
+	// 	}
+	// }
 	return false
 }
 

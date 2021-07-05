@@ -1,9 +1,11 @@
 package components
 
-
 const (
 	//indexes to drawcomponent array
-	SPRITE int = iota
+	AGENT int = iota
+	SPRITE
 	SKELETAL
+	FURNITURE
+	PARTICLE
 	//
 )

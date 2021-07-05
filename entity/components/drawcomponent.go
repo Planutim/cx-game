@@ -13,9 +13,14 @@ import (
 //etc
 
 //this should be array of slices
-// a) for sprite system
-// b) for skeletal system
-var DrawComponentList [2][]*DrawComponent
+// a)agents
+// b) for sprite system
+// c) for skeletal system
+// d) furniture
+// e) particles
+
+//todo 0 index is for agents
+var DrawComponentList [5][]*DrawComponent
 
 var (
 	//queue of ready to be reused ids
@@ -25,7 +30,8 @@ var (
 type DrawComponent struct {
 	objectId   int
 	entityType int
-	//for now
+	//for static
+	//todo sprite animation etc
 	spriteId int
 }
 
@@ -34,7 +40,7 @@ func NewDrawComponent(objectId int, entityType int) int {
 	var index int
 	switch entity.EntityType(entityType) {
 	default:
-		index = SPRITE
+		index = AGENT
 	}
 	//create component
 	newDrawComponent := &DrawComponent{
@@ -51,7 +57,7 @@ func NewDrawComponent(objectId int, entityType int) int {
 	newId, err := idQueue.Pop()
 	if err != nil {
 		newId = len(DrawComponentList[index])
-		DrawComponentList[index] = append(DrawComponentList[SPRITE], newDrawComponent)
+		DrawComponentList[index] = append(DrawComponentList[AGENT], newDrawComponent)
 	} else {
 		DrawComponentList[index][newId] = newDrawComponent
 	}
@@ -65,7 +71,7 @@ func RemoveDrawComponent(entityType int, drawComponentId int) {
 	//determine from which slice to remove, TODO assume everything is SPRITE SYSTEM
 	switch entity.EntityType(entityType) {
 	default:
-		index = SPRITE
+		index = AGENT
 	}
 
 	if DrawComponentList[index][drawComponentId] == nil {
@@ -95,25 +101,52 @@ func clearDrawComponentList() {
 }
 
 //todo
-func DrawEntities() {
-	for i := range DrawComponentList {
-		switch i {
-		case SPRITE:
-			for _, v := range DrawComponentList[i] {
-				physicsComponent := GetPhysicsComponent(v.objectId)
-				if physicsComponent == nil {
-					continue
-				}
-				spriteloader.DrawSpriteQuad(
-					physicsComponent.Pos.X,
-					physicsComponent.Pos.Y,
-					physicsComponent.Size.X,
-					physicsComponent.Size.Y,
-					v.spriteId,
-				)
-			}
-		default:
-			continue
+
+//should be drawn in order because of no z-buffering
+//furniture before agents
+//
+// func DrawEntities() {
+// 	for i := range DrawComponentList {
+// 		switch i {
+// 		case AGENT:
+// 			for _, v := range DrawComponentList[i] {
+// 				physicsComponent := GetPhysicsComponent(v.objectId)
+// 				if physicsComponent == nil {
+// 					continue
+// 				}
+// 				spriteloader.DrawSpriteQuad(
+// 					physicsComponent.Pos.X,
+// 					physicsComponent.Pos.Y,
+// 					physicsComponent.Size.X,
+// 					physicsComponent.Size.Y,
+// 					v.spriteId,
+// 				)
+// 			}
+// 		default:
+// 			continue
+// 		}
+// 	}
+// }
+
+func DrawAgents() {
+	for _, v := range DrawComponentList[AGENT] {
+		id := v.objectId
+		//assume movementComponentlist
+		//or physicsComponentList contains data only for agents for now
+		//movementcomponent = MovementComponentList[id]
+
+		//logic behind movement state and different sprite animations here
+
+		physicsComponent := GetPhysicsComponent(id)
+		if physicsComponent != nil {
+			spriteloader.DrawSpriteQuad(
+				physicsComponent.Pos.X,
+				physicsComponent.Pos.Y,
+				physicsComponent.Size.X,
+				physicsComponent.Size.Y,
+				v.spriteId,
+			)
 		}
+
 	}
 }
