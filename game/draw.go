@@ -36,6 +36,7 @@ func Draw() {
 	item.DrawWorldItems(Cam)
 	enemies.DrawBasicEnemies(Cam)
 	player.Draw(Cam, CurrentPlanet)
+	CurrentPlanet.WorldState.AgentList.Draw(Cam)
 	ui.DrawHUD(player.GetHUDState())
 
 	// tile - air line (green)

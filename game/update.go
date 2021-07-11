@@ -11,6 +11,8 @@ import (
 )
 
 func Update(dt float32) {
+	CurrentPlanet.WorldState.AgentList.Tick(dt)
+	
 	player.Update(dt, CurrentPlanet)
 	physics.Simulate(dt, CurrentPlanet)
 	if Cam.IsFreeCam() {

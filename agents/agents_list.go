@@ -1,6 +1,8 @@
 package agents
 
 import (
+	"github.com/skycoin/cx-game/camera"
+	"github.com/skycoin/cx-game/constants"
 	"github.com/skycoin/cx-game/physics"
 )
 
@@ -14,20 +16,20 @@ var (
 
 func NewAgentList() *AgentList {
 	return &AgentList{
-		Agents: make([]*Agent, MAX_AGENTS),
+		Agents: make([]*Agent, 0, constants.MAX_AGENTS),
 	}
 }
 
 func NewDevAgentList() *AgentList {
 	agentList := NewAgentList()
-	agentList.CreateAgent(PLAYER)
-	agentList.CreateAgent(ENEMY_MOB)
+	agentList.CreateAgent(constants.AGENT_ENEMY_1)
+	agentList.CreateAgent(constants.AGENT_ENEMY_2)
 
 	return agentList
 }
-func (al *AgentList) CreateAgent(agentType AgentType) bool {
+func (al *AgentList) CreateAgent(agentType int) bool {
 	//for now
-	if len(al.Agents) > MAX_AGENTS {
+	if len(al.Agents) > constants.MAX_AGENTS {
 		return false
 	}
 	agent := newAgent(agentType)
@@ -40,7 +42,7 @@ func (al *AgentList) DestroyAgent(agentId int32) bool {
 		return false
 	}
 	for i, v := range al.Agents {
-		if v.AgentID == agentId {
+		if int32(v.ObjectType) == agentId {
 			al.Agents = append(al.Agents[:i], al.Agents[i+1:]...)
 			return true
 		}
@@ -48,10 +50,8 @@ func (al *AgentList) DestroyAgent(agentId int32) bool {
 	return false
 }
 
-func (al *AgentList) Draw() {
-	for _, agent := range al.Agents {
-		agent.Draw()
-	}
+func (al *AgentList) Draw(cam *camera.Camera) {
+
 }
 
 func (al *AgentList) Tick(dt float32) {
