@@ -4,6 +4,7 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 
 	"github.com/skycoin/cx-game/camera"
+	"github.com/skycoin/cx-game/constants/physicsconstants"
 	"github.com/skycoin/cx-game/cxmath"
 	"github.com/skycoin/cx-game/cxmath/math32"
 	"github.com/skycoin/cx-game/input"
@@ -45,7 +46,7 @@ func NewPlayer() *Player {
 	player.SetHelm(DEFAULT_HELM)
 	player.SetSuit(DEFAULT_SUIT)
 
-	maxJumpSpeed = cxmath.Sqrt(2 * cxmath.Abs(physics.Gravity) * player.MovementMeta.Jumpheight)
+	maxJumpSpeed = cxmath.Sqrt(2 * cxmath.Abs(physicsconstants.PHYSICS_GRAVITY) * player.MovementMeta.Jumpheight)
 	minJumpSpeed = maxJumpSpeed / 4
 	physics.RegisterBody(&player.Body)
 
@@ -59,17 +60,6 @@ func (player *Player) Draw(cam *camera.Camera, planet *world.Planet) {
 
 	player.DrawOutfit(disp)
 
-}
-
-var accumulator float32
-
-func (player *Player) Update(dt float32, planet *world.Planet) {
-	accumulator += dt
-
-	for accumulator >= physics.TimeStep {
-		player.FixedTick(planet)
-		accumulator -= physics.TimeStep
-	}
 }
 
 func (player *Player) GetHUDState() ui.HUDState {

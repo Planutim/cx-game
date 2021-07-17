@@ -1,20 +1,17 @@
 package game
 
 import (
-	"github.com/skycoin/cx-game/components"
 	"github.com/skycoin/cx-game/enemies"
 	"github.com/skycoin/cx-game/item"
 	"github.com/skycoin/cx-game/particles"
-	"github.com/skycoin/cx-game/physics"
 	"github.com/skycoin/cx-game/sound"
 	"github.com/skycoin/cx-game/starfield"
 	"github.com/skycoin/cx-game/ui"
 )
 
 func Update(dt float32) {
-	player.Update(dt, CurrentPlanet)
-	physics.Simulate(dt, CurrentPlanet)
-	components.Update(dt)
+	FixedUpdate(dt)
+
 	if Cam.IsFreeCam() {
 		player.Controlled = false
 		Cam.MoveCam(dt)

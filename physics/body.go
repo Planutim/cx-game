@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-gl/mathgl/mgl32"
 
+	"github.com/skycoin/cx-game/constants/physicsconstants"
 	"github.com/skycoin/cx-game/cxmath"
 	"github.com/skycoin/cx-game/world/worldcollider"
 )
@@ -135,7 +136,7 @@ func (body *Body) Move(collider worldcollider.WorldCollider, dt float32) {
 	body.collidingLines = []float32{}
 	body.Collisions.Reset()
 
-	body.Vel.Y -= Gravity * dt
+	body.Vel.Y -= physicsconstants.PHYSICS_GRAVITY * dt
 
 	newPos := body.Pos.Add(body.Vel.Mult(dt))
 
