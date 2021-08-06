@@ -202,3 +202,40 @@ func (body *ParticleBody) MoveBounce(planet worldcollider.WorldCollider, dt floa
 
 	body.Pos = newPos
 }
+
+func (body *ParticleBody) MoveNoBounceRaytrace(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
+	body.Collisions.Reset()
+
+	body.PrevPos = body.Pos
+	body.PrevVel = body.Vel
+
+	body.Vel = body.Vel.Add(acceleration.Mult(0.5 * dt))
+	newPos := body.Pos.Add(body.Vel.Mult(dt))
+
+	body.DetectCollisions(planet, newPos)
+
+	if body.Collisions.Collided() {
+		// Raytrace(newPos)
+	}
+	//todo account drag
+
+	body.Pos = newPos
+}
+
+func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.WorldCollider) {
+	//this should give us the collision point
+
+	positions := cxmath.Raytrace(
+		float64(body.Pos.X),
+		float64(body.Pos.Y),
+		float64(newPos.X),
+		float64(newPos.Y),
+	)
+
+	for _, position := range positions {
+		if planet.TileTopIsSolid(int(position.X), int(position.Y), false) {
+
+		}
+	}
+
+}
