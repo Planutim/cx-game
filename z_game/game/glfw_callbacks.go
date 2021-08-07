@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/skycoin/cx-game/cxmath"
@@ -47,6 +49,10 @@ func mousePressCallback(
 	}
 
 	screenX, screenY := screenPos()
+
+	Xpos, yPos := input.GetMouseWorldCoords().Mgl32().Elem()
+
+	fmt.Println(Xpos, "     ", yPos)
 
 	inventory := item.GetInventoryById(player.InventoryID)
 	clickedSlot :=

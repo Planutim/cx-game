@@ -26,8 +26,19 @@ func TestRaytrace(t *testing.T) {
 		{0, 0}, {0, 1}, {1, 1}, {1, 2}, {2, 2}, {2, 3},
 	}
 	intersects := Raytrace(x0, y0, x1, y1)
+	t.Errorf("expected: %v, got: %v\n", expected, intersects)
+}
 
-	if !pointsEqual(intersects, expected) {
-		t.Errorf("expected %v; got %v", expected, intersects)
+func TestRaytrace2(t *testing.T) {
+	x0 := 0.5
+	y0 := 0.5
+	x1 := 2.5
+	y1 := 3.5
+
+	expected := []Vec2{
+		// {0, 0}, {0, 1}, {1, 1}, {1, 2}, {2, 2}, {2, 3},
+		{},
 	}
+	intersects := Raytrace(x0, y0, x1, y1)
+	t.Errorf("expected: %v, got: %v\n", expected, intersects)
 }

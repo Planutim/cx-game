@@ -32,7 +32,7 @@ func (emitter *BulletEmitter) Emit(position, velocity cxmath.Vec2) {
 		spriteloader.GetSpriteIdByNameUint32("star"),
 		3,
 		constants.PARTICLE_DRAW_HANDLER_TRANSPARENT_INSTANCED,
-		constants.PARTICLE_PHYSICS_HANDLER_DISSAPPEAR_ON_HIT_CALLBACK,
+		constants.PARTICLE_PHYSICS_HANDLER_COLLISION_GRAVITY,
 		emitter.OnHitCallback(),
 	)
 }
