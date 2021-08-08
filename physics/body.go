@@ -2,6 +2,7 @@ package physics
 
 import (
 	"math"
+
 	"github.com/go-gl/mathgl/mgl32"
 
 	"github.com/skycoin/cx-game/cxmath"
@@ -28,8 +29,8 @@ type Body struct {
 	IsIgnoringPlatforms bool
 }
 
-func (body *Body) Contains(x,y float32) bool {
-	pos := mgl32.Vec2 { x,y }
+func (body *Body) Contains(x, y float32) bool {
+	pos := mgl32.Vec2{x, y}
 	disp := pos.Sub(body.Pos.Mgl32())
 	return math32.Abs(disp.X()) < body.Size.X &&
 		math32.Abs(disp.Y()) < body.Size.Y

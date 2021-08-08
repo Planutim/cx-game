@@ -52,7 +52,9 @@ func mousePressCallback(
 
 	Xpos, yPos := input.GetMouseWorldCoords().Mgl32().Elem()
 
-	fmt.Println(Xpos, "     ", yPos)
+	isSolid := World.Planet.TileTopIsSolid(int(Xpos), int(yPos), false)
+
+	fmt.Println(Xpos, "     ", yPos, isSolid)
 
 	inventory := item.GetInventoryById(player.InventoryID)
 	clickedSlot :=
