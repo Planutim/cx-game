@@ -77,8 +77,8 @@ func Raytrace(x0, y0, x1, y1 float64) []Vec2i {
 }
 
 type PosData struct {
-	pos   Vec2i
-	xline bool
+	Pos   Vec2i
+	Xline bool
 }
 
 func Raytrace2(x0, y0, x1, y1 float64) []PosData {
@@ -99,12 +99,13 @@ func Raytrace2(x0, y0, x1, y1 float64) []PosData {
 	pos := Vec2i{int32(x0), int32(y0)}
 	points := make([]PosData, n)
 	for i := 0; i < n; i++ {
-		points[i] = PosData{pos, true}
-
+		points[i] = PosData{pos, false}
 		closerLine := &xLines
 		if xLines.next > yLines.next {
 			closerLine = &yLines
-			points[i].xline = false
+		}
+		if closerLine == &xLines {
+			points[i].Xline = true
 		}
 		pos = pos.Add(closerLine.increment)
 		closerLine.next += closerLine.dt

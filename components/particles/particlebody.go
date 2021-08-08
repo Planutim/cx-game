@@ -131,6 +131,7 @@ func (body *ParticleBody) MoveNoCollision(planet worldcollider.WorldCollider, dt
 }
 
 //also with collision
+<<<<<<< HEAD
 func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
 	body.Collisions.Reset()
 
@@ -197,6 +198,8 @@ func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt fl
 	// }
 
 }
+=======
+>>>>>>> a45841a16768535b3b2109ae81fbf09c70dc44e0
 
 func (body *ParticleBody) MoveBounce(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
 	body.Collisions.Reset()
@@ -292,11 +295,26 @@ func getCloserGridLine(xLines, yLines *GridLine) *GridLine {
 	}
 }
 
+func (body *ParticleBody) Raytrace2(newPos cxmath.Vec2, planet worldcollider.WorldCollider) {
+	posdata := cxmath.Raytrace2(float64(body.Pos.X+0.5), float64(body.Pos.Y+0.5), float64(newPos.X+0.5), float64(newPos.Y+0.5))
+
+	for _, pos := range posdata {
+		if planet.TileIsSolid(int(pos.Pos.X), int(pos.Pos.Y)) {
+			body.Pos = cxmath.Vec2{pos.Pos.Vec2().X(), pos.Pos.Vec2().Y()}
+			body.Vel = cxmath.Vec2{}
+			return
+		}
+	}
+
+	body.Pos = newPos
+}
+
 func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.WorldCollider) {
 	//this should give us the collision point
 
-	x0, y0 := float64(body.Pos.X), float64(body.Pos.Y)
-	x1, y1 := float64(newPos.X), float64(newPos.Y)
+	//correct for tiles
+	x0, y0 := float64(body.Pos.X+0.5), float64(body.Pos.Y+0.5)
+	x1, y1 := float64(newPos.X+0.5), float64(newPos.Y+0.5)
 
 	dx := math.Abs(x1 - x0)
 	dy := math.Abs(y1 - y0)
@@ -304,35 +322,33 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 	x := int(math.Floor(x0))
 	y := int(math.Floor(y0))
 
+	// dt_dx := 1.0 / dx
+	// if dx == 0 {
+	// 	dt_dx = 0
+	// }
+	// dt_dy := 1.0 / dy
+	// if dy == 0 {
+	// 	dt_dy = 0
+	// }
 	dt_dx := 1.0 / dx
-	if dx == 0 {
-		dt_dx = 0
-	}
 	dt_dy := 1.0 / dy
-	if dy == 0 {
-		dt_dy = 0
-	}
 
 	xLines := setupGridLine(x, x0, x1, dx, dt_dx, cxmath.Vec2i{1, 0})
 	yLines := setupGridLine(y, y0, y1, dy, dt_dy, cxmath.Vec2i{0, 1})
 
 	n := 1 + xLines.n + yLines.n
 
+	var prevCloserLine *GridLine
+
 	pos := cxmath.Vec2i{int32(x0), int32(y0)}
-
-	var prevPos cxmath.Vec2i
-
-	// var prevCloserLine *GridLine
-
-	// if xLines.next > yLines.next {
-	// 	prevCloserLine = &yLines
-	// }
-	// var prevPos cxmath.Vec2i
+	points := make([]cxmath.Vec2i, n)
 	for i := 0; i < n; i++ {
+		points[i] = pos
 		closerLine := &xLines
 		if xLines.next > yLines.next {
 			closerLine = &yLines
 		}
+<<<<<<< HEAD
 		if planet.TileTopIsSolid(int(pos.X), int(pos.Y), false) {
 			// fmt.Printf("tile at %v,%v is solid\n", pos.X, pos.Y)
 
@@ -342,40 +358,104 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 			// 	//correct the collision
 			// 	body.Collisions.Above = false
 			// 	body.Collisions.Below = false
+=======
+>>>>>>> a45841a16768535b3b2109ae81fbf09c70dc44e0
 
-			// 	vv = cxmath.Vec2{
-			// 		X: float32((x1 - x0) * xLines.next),
-			// 		Y: float32((y1 - y0) * (yLines.next - yLines.dt)),
-			// 	}
-
-			// } else {
-			// 	body.Collisions.Left = false
-			// 	body.Collisions.Right = false
-
-			// 	vv = cxmath.Vec2{
-			// 		X: float32((x1 - x0) * (xLines.next - xLines.dt)),
-			// 		Y: float32((y1 - y0) * yLines.next),
-			// 	}
+		if planet.TileIsSolid(int(pos.X), int(pos.Y)) {
+			// var inc cxmath.Vec2
+			// if prevCloserLine.increment == xLines.increment {
+			// 	inc = cxmath.Vec2{}
 			// }
+			var inc cxmath.Vec2
+			inc.X = (newPos.X - body.Pos.X) * float32(xLines.next)
+			inc.Y = (newPos.Y - body.Pos.Y) * float32(yLines.next)
+			// fmt.Println(inc, " ISSS")
+			// body.Pos = cxmath.Vec2{pos.Vec2().X(), pos.Vec2().Y()}
+			body.Pos = body.Pos.Add(inc)
 
-			// body.Pos = body.Pos.Add(vv)
-			body.Pos = cxmath.Vec2{prevPos.Vec2().X(), prevPos.Vec2().Y()}
-
-			// fmt.Println(toAdd)
-			// fmt.Println(body.Pos)
-
-			// fmt.Println(body.Pos)
-			// fmt.Println()
+			fmt.Println(dx, dy, "    ", inc, "     ", xLines.next, yLines.next, "   ", "    ", body.Pos, "    ", newPos)
+			// body.Pos = body.Pos.Add(inc)
+			// body.Pos = body.Pos.Add(inc)
+			body.Vel.X = 0
+			body.Vel.Y = 0
 			return
 		}
 
-		prevPos = pos
-		// prevCloserLine = closerLine
-
+		if prevCloserLine == nil {
+			prevCloserLine = closerLine
+		}
 		pos = pos.Add(closerLine.increment)
+		prevCloserLine = closerLine
 		closerLine.next += closerLine.dt
+	}
+	body.Pos = newPos
+}
 
+func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
+	body.Collisions.Reset()
+
+	if body.Vel.X == 0 && body.Vel.Y == 0 {
+		return
 	}
 
+<<<<<<< HEAD
 	body.Pos = newPos
+=======
+	body.PrevPos = body.Pos
+	body.PrevVel = body.Vel
+
+	body.Vel = body.Vel.Add(acceleration.Mult(0.5 * dt))
+	newPos := body.Pos.Add(body.Vel.Mult(dt))
+	//todo account drag
+
+	body.DetectCollisions(planet, newPos)
+
+	// body.Raytrace(newPos, planet)
+	body.Raytrace(newPos, planet)
+
+	// if body.Collisions.Collided() {
+
+	// 	body.Vel = cxmath.Vec2{}
+
+	// 	// if body.Collisions.Below {
+	// 	// 	body.Pos.Y = body.Pos.Y + 0.5
+	// 	// 	fmt.Println("collided at top")
+	// 	// }
+	// 	// if body.Collisions.Above {
+	// 	// 	body.Pos.Y = body.Pos.Y - 0.5
+	// 	// }
+	// 	// if body.Collisions.Left {
+	// 	// 	body.Pos.Y = body.Pos.Y - 0.5
+	// 	// }
+	// 	// if body.Collisions.Right {
+	// 	// 	body.Pos.Y = body.Pos.Y + 0.5
+	// 	// }
+	// }
+
+	// if body.isCollidingTop(planet, newPos) {
+	// 	body.Collisions.Above = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.Y = body.bounds(newPos).top - 0.5 - body.Size.Y/2
+	// }
+	// if body.isCollidingBottom(planet, newPos) {
+	// 	body.Collisions.Below = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.Y = body.bounds(newPos).bottom + 0.5 + body.Size.Y/2
+	// }
+
+	// if body.isCollidingLeft(planet, newPos) {
+	// 	body.Collisions.Left = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.X = body.bounds(newPos).left + 0.5 + body.Size.X/2
+	// }
+	// if body.isCollidingRight(planet, newPos) {
+	// 	body.Collisions.Right = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.X = body.bounds(newPos).right - 0.5 + body.Size.X/2
+	// }
+>>>>>>> a45841a16768535b3b2109ae81fbf09c70dc44e0
 }
