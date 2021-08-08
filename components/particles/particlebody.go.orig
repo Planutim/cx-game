@@ -131,6 +131,75 @@ func (body *ParticleBody) MoveNoCollision(planet worldcollider.WorldCollider, dt
 }
 
 //also with collision
+<<<<<<< HEAD
+func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
+	body.Collisions.Reset()
+
+	if body.Vel.X == 0 && body.Vel.Y == 0 {
+		return
+	}
+
+	body.PrevPos = body.Pos
+	body.PrevVel = body.Vel
+
+	body.Vel = body.Vel.Add(acceleration.Mult(0.5 * dt))
+	newPos := body.Pos.Add(body.Vel.Mult(dt))
+	//todo account drag
+
+	body.DetectCollisions(planet, newPos)
+
+	body.Raytrace(newPos, planet)
+	if body.Collisions.Collided() {
+
+		body.Vel = cxmath.Vec2{}
+	}
+
+	// if body.Collisions.Below {
+	// 	body.Pos.Y = body.Pos.Y + 0.5
+	// 	fmt.Println("collided at top")
+	// }
+	// if body.Collisions.Above {
+	// 	body.Pos.Y = body.Pos.Y - 0.5
+	// }
+	// if body.Collisions.Left {
+	// 	body.Pos.Y = body.Pos.Y - 0.5
+	// }
+	// if body.Collisions.Right {
+	// 	body.Pos.Y = body.Pos.Y + 0.5
+	// }
+	// } else {
+	// 	body.Pos = newPos
+	// }
+
+	// if body.isCollidingTop(planet, newPos) {
+	// 	body.Collisions.Above = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.Y = body.bounds(newPos).top - 0.5 - body.Size.Y/2
+	// }
+	// if body.isCollidingBottom(planet, newPos) {
+	// 	body.Collisions.Below = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.Y = body.bounds(newPos).bottom + 0.5 + body.Size.Y/2
+	// }
+
+	// if body.isCollidingLeft(planet, newPos) {
+	// 	body.Collisions.Left = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.X = body.bounds(newPos).left + 0.5 + body.Size.X/2
+	// }
+	// if body.isCollidingRight(planet, newPos) {
+	// 	body.Collisions.Right = true
+	// 	body.Vel.Y = 0
+	// 	body.Vel.X = 0
+	// 	newPos.X = body.bounds(newPos).right - 0.5 + body.Size.X/2
+	// }
+
+}
+=======
+>>>>>>> a45841a16768535b3b2109ae81fbf09c70dc44e0
 
 func (body *ParticleBody) MoveBounce(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
 	body.Collisions.Reset()
@@ -279,29 +348,42 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 		if xLines.next > yLines.next {
 			closerLine = &yLines
 		}
+<<<<<<< HEAD
+		if planet.TileTopIsSolid(int(pos.X), int(pos.Y), false) {
+			// fmt.Printf("tile at %v,%v is solid\n", pos.X, pos.Y)
 
-		if i != 0 && planet.TileIsSolid(int(pos.X), int(pos.Y)) {
+			// var vv cxmath.Vec2
+
+			// if prevCloserLine == &xLines {
+			// 	//correct the collision
+			// 	body.Collisions.Above = false
+			// 	body.Collisions.Below = false
+=======
+>>>>>>> a45841a16768535b3b2109ae81fbf09c70dc44e0
+
+		if planet.TileIsSolid(int(pos.X), int(pos.Y)) {
+			// var inc cxmath.Vec2
+			// if prevCloserLine.increment == xLines.increment {
+			// 	inc = cxmath.Vec2{}
+			// }
 			var inc cxmath.Vec2
-			if prevCloserLine.increment == xLines.increment {
-				inc.X = float32(newPos.X-body.Pos.X) * float32(xLines.next-xLines.dt)
-				dtt := inc.X / body.Vel.X
-				inc.Y = body.Vel.Y * dtt
-			} else {
-				if body.Vel.Y < 0 {
-					inc.Y = body.Pos.Y + float32(yLines.next)*(newPos.Y-body.Pos.Y)
-				} else {
-					inc.Y = body.Pos.Y + float32(yLines.next)*(newPos.Y-body.Pos.Y)
-				}
-
-				inc.Y = float32(newPos.Y-body.Pos.Y) * float32(yLines.next-yLines.dt)
-				dtt := inc.Y / body.Vel.Y
-				inc.X = body.Vel.X * dtt
-			}
+			inc.X = (newPos.X - body.Pos.X) * float32(xLines.next)
+			inc.Y = (newPos.Y - body.Pos.Y) * float32(yLines.next)
+			// fmt.Println(inc, " ISSS")
+			// body.Pos = cxmath.Vec2{pos.Vec2().X(), pos.Vec2().Y()}
 			body.Pos = body.Pos.Add(inc)
-			body.Vel = cxmath.Vec2{}
+
+			fmt.Println(dx, dy, "    ", inc, "     ", xLines.next, yLines.next, "   ", "    ", body.Pos, "    ", newPos)
+			// body.Pos = body.Pos.Add(inc)
+			// body.Pos = body.Pos.Add(inc)
+			body.Vel.X = 0
+			body.Vel.Y = 0
 			return
 		}
 
+		if prevCloserLine == nil {
+			prevCloserLine = closerLine
+		}
 		pos = pos.Add(closerLine.increment)
 		prevCloserLine = closerLine
 		closerLine.next += closerLine.dt
@@ -312,6 +394,13 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt float32, acceleration cxmath.Vec2) {
 	body.Collisions.Reset()
 
+	if body.Vel.X == 0 && body.Vel.Y == 0 {
+		return
+	}
+
+<<<<<<< HEAD
+	body.Pos = newPos
+=======
 	body.PrevPos = body.Pos
 	body.PrevVel = body.Vel
 
@@ -368,4 +457,5 @@ func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt fl
 	// 	body.Vel.X = 0
 	// 	newPos.X = body.bounds(newPos).right - 0.5 + body.Size.X/2
 	// }
+>>>>>>> a45841a16768535b3b2109ae81fbf09c70dc44e0
 }

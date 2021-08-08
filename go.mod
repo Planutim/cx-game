@@ -14,6 +14,7 @@ require (
 	github.com/mjibson/go-dsp v0.0.0-20180508042940-11479a337f12
 	github.com/nullboundary/glfont v0.0.0-20201021194140-68bf63f50dcb // indirect
 	github.com/seehuhn/mt19937 v1.0.0
+	github.com/stretchr/testify v1.6.1 // indirect
 	github.com/ted537/go-openal v0.0.0-20210618203930-fa36a2aaf89e
 	github.com/urfave/cli/v2 v2.3.0
 	golang.org/x/image v0.0.0-20190321063152-3fc05d484e9f // indirect
