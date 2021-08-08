@@ -244,12 +244,6 @@ func (body *ParticleBody) Raytrace2(newPos cxmath.Vec2, planet worldcollider.Wor
 func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.WorldCollider) {
 	//this should give us the collision point
 
-	if body.Vel.X == 0 && body.Vel.Y == 0 {
-		fmt.Println("TTT")
-		return
-	} else {
-		fmt.Println(body.Vel)
-	}
 	//correct for tiles
 	x0, y0 := float64(body.Pos.X+0.5), float64(body.Pos.Y+0.5)
 	x1, y1 := float64(newPos.X+0.5), float64(newPos.Y+0.5)
@@ -281,6 +275,11 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 	pos := cxmath.Vec2i{int32(x0), int32(y0)}
 	points := make([]cxmath.Vec2i, n)
 	for i := 0; i < n; i++ {
+		points[i] = pos
+		closerLine := &xLines
+		if xLines.next > yLines.next {
+			closerLine = &yLines
+		}
 
 		if planet.TileIsSolid(int(pos.X), int(pos.Y)) {
 			// var inc cxmath.Vec2
@@ -288,19 +287,20 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 			// 	inc = cxmath.Vec2{}
 			// }
 			var inc cxmath.Vec2
-			inc.X = (newPos.X - body.Pos.X) * float32(xLines.dt)
-			inc.Y = (newPos.Y - body.Pos.Y) * float32(yLines.dt)
+			inc.X = (newPos.X - body.Pos.X) * float32(xLines.next)
+			inc.Y = (newPos.Y - body.Pos.Y) * float32(yLines.next)
+			// fmt.Println(inc, " ISSS")
 			// body.Pos = cxmath.Vec2{pos.Vec2().X(), pos.Vec2().Y()}
 			body.Pos = body.Pos.Add(inc)
-			body.Vel = cxmath.Vec2{}
-			fmt.Println(body.Vel)
+
+			fmt.Println(dx, dy, "    ", inc, "     ", xLines.next, yLines.next, "   ", "    ", body.Pos, "    ", newPos)
+			// body.Pos = body.Pos.Add(inc)
+			// body.Pos = body.Pos.Add(inc)
+			body.Vel.X = 0
+			body.Vel.Y = 0
 			return
 		}
-		points[i] = pos
-		closerLine := &xLines
-		if xLines.next > yLines.next {
-			closerLine = &yLines
-		}
+
 		if prevCloserLine == nil {
 			prevCloserLine = closerLine
 		}
