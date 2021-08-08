@@ -1,6 +1,8 @@
 package item
 
 import (
+	"fmt"
+
 	"github.com/skycoin/cx-game/particle_emitter"
 	"github.com/skycoin/cx-game/spriteloader"
 )
@@ -16,6 +18,8 @@ func UseGun(info ItemUseInfo) {
 	// particles.CreateBullet(origin, velocity)
 
 	//todo assign each agent its own emitters, right now jsut call global emitter
+	fmt.Println("ORIGIN: ", info.World.Planet.TileIsSolid(int(origin.X()+0.5), int(origin.Y())),
+		"     TARGET: ", info.World.Planet.TileIsSolid(int(target.X()), int(target.Y())))
 	particle_emitter.CreateBullet(origin, velocity)
 }
 

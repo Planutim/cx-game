@@ -1,7 +1,6 @@
 package particles
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/skycoin/cx-game/cxmath"
@@ -148,26 +147,28 @@ func (body *ParticleBody) MoveNoBounce(planet worldcollider.WorldCollider, dt fl
 
 	body.DetectCollisions(planet, newPos)
 
+	body.Raytrace(newPos, planet)
 	if body.Collisions.Collided() {
-		body.Raytrace(newPos, planet)
-		body.Vel = cxmath.Vec2{}
 
-		// if body.Collisions.Below {
-		// 	body.Pos.Y = body.Pos.Y + 0.5
-		// 	fmt.Println("collided at top")
-		// }
-		// if body.Collisions.Above {
-		// 	body.Pos.Y = body.Pos.Y - 0.5
-		// }
-		// if body.Collisions.Left {
-		// 	body.Pos.Y = body.Pos.Y - 0.5
-		// }
-		// if body.Collisions.Right {
-		// 	body.Pos.Y = body.Pos.Y + 0.5
-		// }
-	} else {
-		body.Pos = newPos
+		body.Vel = cxmath.Vec2{}
 	}
+
+	// if body.Collisions.Below {
+	// 	body.Pos.Y = body.Pos.Y + 0.5
+	// 	fmt.Println("collided at top")
+	// }
+	// if body.Collisions.Above {
+	// 	body.Pos.Y = body.Pos.Y - 0.5
+	// }
+	// if body.Collisions.Left {
+	// 	body.Pos.Y = body.Pos.Y - 0.5
+	// }
+	// if body.Collisions.Right {
+	// 	body.Pos.Y = body.Pos.Y + 0.5
+	// }
+	// } else {
+	// 	body.Pos = newPos
+	// }
 
 	// if body.isCollidingTop(planet, newPos) {
 	// 	body.Collisions.Above = true
@@ -333,7 +334,7 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 			closerLine = &yLines
 		}
 		if planet.TileTopIsSolid(int(pos.X), int(pos.Y), false) {
-			fmt.Printf("tile at %v,%v is solid\n", pos.X, pos.Y)
+			// fmt.Printf("tile at %v,%v is solid\n", pos.X, pos.Y)
 
 			// var vv cxmath.Vec2
 
@@ -376,4 +377,5 @@ func (body *ParticleBody) Raytrace(newPos cxmath.Vec2, planet worldcollider.Worl
 
 	}
 
+	body.Pos = newPos
 }

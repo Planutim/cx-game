@@ -22,6 +22,7 @@ func NewBulletEmitter(particlelist *particles.ParticleList) *BulletEmitter {
 }
 
 func (emitter *BulletEmitter) Emit(position, velocity cxmath.Vec2) {
+	
 	emitter.particleList.AddParticle(
 		position,
 		//set velocity up
