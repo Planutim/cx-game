@@ -221,3 +221,13 @@ func ToggleFiltering() {
 
 	fmt.Println(message)
 }
+
+func ToggleSpritePrograms() {
+	if spriteProgram == &spriteProgram1 {
+		fmt.Println("Switched to secondary program")
+		spriteProgram = &spriteProgram2
+	} else {
+		fmt.Println("Switched to original program")
+		spriteProgram = &spriteProgram1
+	}
+}

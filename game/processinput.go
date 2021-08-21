@@ -34,6 +34,9 @@ func ProcessInput() {
 		if input.GetButtonDown("toggle-zoom") {
 			Cam.CycleZoom()
 		}
+		if input.GetButtonDown("toggle-texture-offset") {
+			render.ToggleSpritePrograms()
+		}
 
 		if input.GetButtonDown("toggle-texture-filtering") {
 			render.ToggleFiltering()
@@ -44,6 +47,9 @@ func ProcessInput() {
 	case input.FREECAM:
 		if input.GetButtonDown("freecam-off") {
 			Cam.TurnOffFreeCam()
+		}
+		if input.GetButtonDown("toggle-texture-offset") {
+			render.ToggleSpritePrograms()
 		}
 		if input.GetButtonDown("toggle-bbox") {
 			render.ToggleBBox()

@@ -74,12 +74,14 @@ func registerKeyMaps() {
 	MapKeyToButton("toggle-texture-filtering", glfw.KeyF6)
 	MapKeyToButton("toggle-bbox", glfw.KeyF1)
 	MapKeyToButton("bubbles", glfw.KeyU)
+	MapKeyToButton("toggle-texture-offset", glfw.KeyF5)
 
 	MapKeyToButton("enemy-tool-scroll-down", glfw.KeyDown)
 	MapKeyToButton("enemy-tool-scroll-up", glfw.KeyUp)
 
 	//freecam
 	SetInputContext(FREECAM)
+	MapKeyToButton("toggle-texture-offset", glfw.KeyF5)
 	MapKeyToButton("right", glfw.KeyD)
 	MapKeyToButton("left", glfw.KeyA)
 	MapKeyToButton("up", glfw.KeyW)

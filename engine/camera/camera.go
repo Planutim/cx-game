@@ -26,7 +26,7 @@ var (
 
 	currentZoomIndex int = 1
 
-	zoomLevels = []float32{0.75, 1, 1.75}
+	zoomLevels = []float32{0.75, 1, 1.75, 3, 5, 7}
 	// firstTick    bool    = true
 	focus_area focusArea
 )
@@ -115,7 +115,7 @@ func (camera *Camera) SetCameraCenter() {
 
 //sets camera for current position
 func (camera *Camera) SetCameraPosition(x, y float32) {
-	camera.updateFocusArea(x, y)
+	camera.updateFocusArea(x, y-3)
 	camera.UpdateFrustum()
 }
 
