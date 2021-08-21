@@ -26,7 +26,7 @@ var (
 
 	currentZoomIndex int = 1
 
-	zoomLevels = []float32{0.75, 1, 1.75}
+	zoomLevels = []float32{0.75, 1, 15.75, 25}
 	// firstTick    bool    = true
 	focus_area focusArea
 )

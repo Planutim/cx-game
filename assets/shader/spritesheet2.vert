@@ -9,13 +9,13 @@ uniform mat4 modelviews[NUM_INSTANCES];
 out vec4 poss;
 
 void main() {
-	// gl_Position = 
-	// 	projection *
-	// 	modelviews[gl_InstanceID] * 
-	// 	vec4(position, 1.0) ;
+	gl_Position = 
+		projection *
+		modelviews[gl_InstanceID] * 
+		vec4(position, 1.0) ;
 
-	poss = round(32*modelviews[gl_InstanceID]*vec4(position, 1.0));
-	gl_Position = projection * poss;
+	// poss = round(32*modelviews[gl_InstanceID]*vec4(position, 1.0));
+	// gl_Position = projection * poss;
 
 	instance = gl_InstanceID;
 	spriteCoord = texcoord;

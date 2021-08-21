@@ -41,6 +41,12 @@ func ProcessInput() {
 		if input.GetButtonDown("toggle-bbox") {
 			render.ToggleBBox()
 		}
+		if input.GetButtonDown("toggle-programs") {
+			render.TogglePrograms()
+		}
+		if input.GetButtonDown("toggle-texture-offset") {
+			render.ToggleTextureOffset()
+		}
 	case input.FREECAM:
 		if input.GetButtonDown("freecam-off") {
 			Cam.TurnOffFreeCam()
@@ -48,6 +54,13 @@ func ProcessInput() {
 		if input.GetButtonDown("toggle-bbox") {
 			render.ToggleBBox()
 		}
+		if input.GetButtonDown("toggle-programs") {
+			render.TogglePrograms()
+		}
+		if input.GetButtonDown("toggle-texture-offset") {
+			render.ToggleTextureOffset()
+		}
+
 	}
 
 	input.Reset()

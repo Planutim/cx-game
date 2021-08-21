@@ -12,9 +12,7 @@ void main() {
 		vec2 texCoord =
 			 vec2(uvtransforms[instance] * vec3(spriteCoord,1) );
 
-		// vec2 newTexCoord = (texCoord*32 + vec2(0.5,0.5))/32;
-		vec2 newTexCoord = texCoord + vec2(0.5/16, 0.5/16);
-		frag_colour = texture(tex, newTexCoord);
+		frag_colour = texture(tex, texCoord);
 		// frag_colour = vec4(0,1,0,1);
 		// return;
 		// if (poss.x < 0) {

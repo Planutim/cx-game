@@ -93,8 +93,8 @@ func Flush(projection mgl32.Mat4) {
 }
 
 func flushSpriteDraws(projection mgl32.Mat4) {
-	spriteProgram.Use()
-	defer spriteProgram.StopUsing()
+	activeSpriteProgram.Use()
+	defer activeSpriteProgram.StopUsing()
 
 	gl.Enable(gl.DEPTH_TEST)
 	gl.Enable(gl.BLEND)
@@ -104,7 +104,7 @@ func flushSpriteDraws(projection mgl32.Mat4) {
 
 	gl.BindVertexArray(QuadVao)
 
-	spriteProgram.SetMat4("projection", &projection)
+	activeSpriteProgram.SetMat4("projection", &projection)
 
 	for atlas, spriteDraws := range spriteDrawsPerAtlas {
 		drawAtlasSprites(atlas, spriteDraws)
@@ -176,8 +176,8 @@ func divideRoundUp(a, b int32) int32 {
 }
 
 func drawInstancedQuads(batch Uniforms) {
-	spriteProgram.SetMat4s("modelviews", batch.ModelViews)
-	spriteProgram.SetMat3s("uvtransforms", batch.UVTransforms)
+	activeSpriteProgram.SetMat4s("modelviews", batch.ModelViews)
+	activeSpriteProgram.SetMat3s("uvtransforms", batch.UVTransforms)
 	gl.DrawArraysInstanced(gl.TRIANGLES, 0, 6, batch.Count)
 }
 
