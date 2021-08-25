@@ -182,7 +182,9 @@ func (planet *Planet) PlaceTileType(tileTypeID TileTypeID, x, y int) {
 	}
 	tilesInLayer := planet.GetLayerTiles(tileType.Layer)
 	rootTileIdx := planet.GetTileIndex(x, y)
-	if rootTileIdx == -1 { return }
+	if rootTileIdx == -1 {
+		return
+	}
 	tilesInLayer[rootTileIdx] =
 		tileType.CreateTile(TileCreationOptions{
 			Neighbours: planet.GetNeighbours(tilesInLayer, x, y),
@@ -359,6 +361,16 @@ func (planet *Planet) GetTopLayerTile(x, y int) *Tile {
 	}
 }
 
+func (planet *Planet) GetLayerTile(x, y int, layer LayerID) *Tile {
+	index := planet.GetTileIndex(x, y)
+
+	if index >= 0 {
+		return &planet.Layers[layer].Tiles[index]
+	} else {
+		return nil
+	}
+}
+
 func (planet *Planet) TileIsSolid(x, y int) bool {
 	tile := planet.GetTopLayerTile(x, y)
 	return tile != nil &&
@@ -366,6 +378,12 @@ func (planet *Planet) TileIsSolid(x, y int) bool {
 		tile.TileCollisionType == TileCollisionTypeSolid
 }
 
+func (planet *Planet) TileIsOccupied(x, y int, layer LayerID) bool {
+	tile := planet.GetLayerTile(x, y, layer)
+
+	return tile != nil && tile.TileCategory != TileCategoryNone
+
+}
 func (planet *Planet) TileTopIsSolid(x, y int, ignorePlatforms bool) bool {
 	tile := planet.GetTopLayerTile(x, y)
 	return tile != nil && tile.TileCategory != TileCategoryNone &&

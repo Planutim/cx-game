@@ -102,7 +102,7 @@ func GetItemTypeIdForTileTypeID(id world.TileTypeID) ItemTypeID {
 		worldCoords := info.WorldCoords()
 		x := int(worldCoords.X() + 0.5)
 		y := int(worldCoords.Y() + 0.5)
-		if !info.World.Planet.TileIsSolid(x, y) {
+		if !info.World.Planet.TileIsOccupied(x, y, tiletype.Layer) {
 			info.Slot.Quantity--
 			info.World.Planet.PlaceTileType(id, x, y)
 		}
