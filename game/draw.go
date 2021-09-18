@@ -64,6 +64,10 @@ func Draw() {
 	components.Draw_Queued(&World.Entities, Cam)
 	render.Flush(render.Projection)
 
+	if world.TEST_DRAW {
+		world.DrawRegolith(Cam, render.Projection)
+
+	}
 	//draw after flushing
 	components.Draw(&World.Entities, Cam)
 	particles.DrawMidTopParticles(worldCtx)
@@ -86,6 +90,7 @@ func Draw() {
 	inventory.Draw(baseCtx, invCameraTransform)
 	ui.DrawDamageIndicators(invCameraTransform)
 	render.Flush(render.Projection)
+
 	glfw.PollEvents()
 	win.Window.SwapBuffers()
 }

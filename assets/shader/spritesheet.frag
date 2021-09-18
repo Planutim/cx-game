@@ -13,3 +13,9 @@ void main() {
 		frag_colour = texture(tex, texCoord);
 		if (frag_colour.a < 0.1) { discard; }
 }
+
+
+/*
+first row first 
+
+*/

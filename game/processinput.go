@@ -64,9 +64,12 @@ func ProcessInput() {
 			Cam.SwitchToTarget()
 		}
 		if input.GetKeyDown(glfw.KeyM) {
-			world.SWAP = !world.SWAP
-			fmt.Println("SWAP: ", world.SWAP)
+			// world.SWAP = !world.SWAP
+			// fmt.Println("SWAP: ", world.SWAP)
+			world.TEST_DRAW = !world.TEST_DRAW
+			fmt.Println("TEST_DRAW: ", world.TEST_DRAW)
 		}
+
 	case input.FREECAM:
 		if input.GetButtonDown("freecam-off") {
 			Cam.TurnOffFreeCam()

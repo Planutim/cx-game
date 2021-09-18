@@ -1,6 +1,7 @@
 package world
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/skycoin/cx-game/constants"
 	"github.com/skycoin/cx-game/cxmath"
+	"github.com/skycoin/cx-game/cxmath/math32"
 	"github.com/skycoin/cx-game/cxmath/mathi"
 	"github.com/skycoin/cx-game/engine/camera"
 	"github.com/skycoin/cx-game/render"
@@ -87,10 +89,10 @@ func (planet *Planet) DrawHemisphere(
 
 		transform := positionedTile.Transform().
 			Mul4(mgl32.Translate3D(0, 0, z))
-		if positionedTile.Tile.Name == "regolith" {
+		if positionedTile.Tile.Name == "regolith" && TEST_DRAW {
 			regolithTiles = append(regolithTiles, positionedTile)
 			// positionedTile = newTile
-			// continue
+			continue
 		}
 		render.DrawWorldSprite(
 			transform, positionedTile.Tile.SpriteID,
@@ -101,24 +103,67 @@ func (planet *Planet) DrawHemisphere(
 
 var regolithTiles []PositionedTile
 
+var TEST_DRAW bool = true
+
 func DrawRegolith(Cam *camera.Camera, projection mgl32.Mat4) {
 	regolithShader.Use()
 	regolithShader.SetMat4("projection", &projection)
 	view := Cam.GetViewMatrix()
 	regolithShader.SetMat4("view", &view)
-	for _, positionedTile := range regolithTiles {
+
+	regolithShader.SetInt("u_texture", 0)
+	for i, positionedTile := range regolithTiles {
+		sprite := render.GetSpriteByID(positionedTile.Tile.SpriteID)
+		transform := sprite.Transform
+
+		w := 1 / transform.At(0, 0)
+		h := 1 / transform.At(1, 1)
+
+		xtransform := transform.At(0, 2)
+		ytransform := transform.At(1, 2)
+
+		x := math32.Round(xtransform / transform.At(0, 0))
+		y := math32.Round(ytransform / transform.At(1, 1))
+		// if xtransform == 0 {
+		// 	x = 0
+		// }
+		// if ytransform == 0 {
+		// 	y = 0
+		// }
+
+		offset := y*w + x
+
+		regolithShader.SetFloat("imageLayer", offset)
+
+		// var result float32
+		if i == 4 || i == 5 {
+			fmt.Println("TESTING: ", i)
+			fmt.Print(transform)
+			fmt.Println("SPLIT VALUES: ")
+
+			fmt.Printf("W: %v, H: %v, X: %v, Y: %v\n", w, h, x, y)
+		}
+		if i == 6 {
+			fmt.Println()
+		}
+
+		// regolithShader.SetFloat("imageLayer", result)
 		model := mgl32.Translate3D(
 			positionedTile.Position.Vec2().X(),
 			positionedTile.Position.Vec2().Y(),
 			0,
 		)
 		regolithShader.SetMat4("model", &model)
+		// regolithShader.SetFloat("imageLayer", float32(positionedTile.Tile.SpriteID))
+
+		// regolithShader.SetInt("layer")
 
 		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D_ARRAY, tex_array)
 		gl.BindVertexArray(render.QuadVao)
 		gl.DrawArrays(gl.TRIANGLES, 0, 6)
 	}
+	// fmt.Printf("MIN: %v, MAX: %v\n", min, max)
 	regolithTiles = regolithTiles[:0]
 }
 func filterLiquidTiles(all []PositionedTile) []PositionedTile {
