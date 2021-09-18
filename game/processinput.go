@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/skycoin/cx-game/engine"
 	"github.com/skycoin/cx-game/engine/camera"
@@ -60,6 +62,10 @@ func ProcessInput() {
 		}
 		if input.GetButtonDown("set-camera-target") {
 			Cam.SwitchToTarget()
+		}
+		if input.GetKeyDown(glfw.KeyM) {
+			world.SWAP = !world.SWAP
+			fmt.Println("SWAP: ", world.SWAP)
 		}
 	case input.FREECAM:
 		if input.GetButtonDown("freecam-off") {

@@ -69,7 +69,13 @@ func (tt TileType) Size() cxmath.Vec2i {
 	return cxmath.Vec2i{tt.Width, tt.Height}
 }
 
+var SWAP bool
+
 func (tt *TileType) Transform() mgl32.Mat4 {
+	if SWAP {
+		return mgl32.Ident4()
+	}
+	// return mgl32.Translate3D(1, 1, 0)
 	translate := mgl32.Translate3D(
 		-0.5+float32(tt.Width)/2,
 		-0.5+float32(tt.Height)/2,

@@ -3,7 +3,9 @@ package world
 import (
 	"log"
 
+	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
+
 	//"github.com/go-gl/gl/v4.1-core/gl"
 
 	"github.com/skycoin/cx-game/constants"
@@ -57,7 +59,17 @@ func (planet *Planet) DrawHemisphere(
 	planet.program.Use()
 
 	visible := planet.visibleTiles(layer, cam, left, right)
+
+	// var newTile PositionedTile
+	// for _, positionedTile := range visible {
+	// 	if positionedTile.Tile.Name == "stone" {
+	// 		newTile = positionedTile
+	// 		break
+
+	// 	}
+	// }
 	for _, positionedTile := range visible {
+
 		// z := -10+float32(layerID)/4
 		// TODO use a data structure instead of if/else
 		var z float32
@@ -75,6 +87,11 @@ func (planet *Planet) DrawHemisphere(
 
 		transform := positionedTile.Transform().
 			Mul4(mgl32.Translate3D(0, 0, z))
+		if positionedTile.Tile.Name == "regolith" {
+			regolithTiles = append(regolithTiles, positionedTile)
+			// positionedTile = newTile
+			// continue
+		}
 		render.DrawWorldSprite(
 			transform, positionedTile.Tile.SpriteID,
 			render.NewSpriteDrawOptions(),
@@ -82,6 +99,28 @@ func (planet *Planet) DrawHemisphere(
 	}
 }
 
+var regolithTiles []PositionedTile
+
+func DrawRegolith(Cam *camera.Camera, projection mgl32.Mat4) {
+	regolithShader.Use()
+	regolithShader.SetMat4("projection", &projection)
+	view := Cam.GetViewMatrix()
+	regolithShader.SetMat4("view", &view)
+	for _, positionedTile := range regolithTiles {
+		model := mgl32.Translate3D(
+			positionedTile.Position.Vec2().X(),
+			positionedTile.Position.Vec2().Y(),
+			0,
+		)
+		regolithShader.SetMat4("model", &model)
+
+		gl.ActiveTexture(gl.TEXTURE0)
+		gl.BindTexture(gl.TEXTURE_2D_ARRAY, tex_array)
+		gl.BindVertexArray(render.QuadVao)
+		gl.DrawArrays(gl.TRIANGLES, 0, 6)
+	}
+	regolithTiles = regolithTiles[:0]
+}
 func filterLiquidTiles(all []PositionedTile) []PositionedTile {
 	liquids := []PositionedTile{}
 	for _, tile := range all {
